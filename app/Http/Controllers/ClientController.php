@@ -3,18 +3,17 @@
 namespace CodeProject\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use CodeProject\Http\Requests;
+use Illuminate\Support\Facades\Input;
 
-class ClientController extends Controller
-{
+class ClientController extends Controller {
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index() {
         return \CodeProject\Client::all();
     }
 
@@ -24,9 +23,8 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        return Client::create($request->all());
+    public function store(Request $request) {
+        return \CodeProject\Client::create($request->all());
     }
 
     /**
@@ -35,8 +33,7 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         return \CodeProject\Client::find($id);
     }
 
@@ -46,8 +43,7 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         //
     }
 
@@ -58,10 +54,14 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        $client = \CodeProject\Client::findorfail($id);
-        $client->update($request->all());
+    public function update(Request $request, $id) {
+        $client = \CodeProject\Client::find($id);
+        if ($client != NULL) {            
+            $client->update($request->all());
+            return $client::find($id);
+        }else{
+            return json_encode("Cliente nao foi encontrado");
+        }        
     }
 
     /**
@@ -70,8 +70,17 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        \CodeProject\Client::find($id)->delete();
+    public function destroy($id) {
+        $delete = false;
+        $client = \CodeProject\Client::find($id);
+        if ($client != NULL) {
+            $delete = $client->delete();
+        }
+        if ($delete) {
+            return json_encode("Deletado com sucesso!");
+        } else {
+            return json_encode("Impossivel foi possivel deletar");
+        }
     }
+
 }
