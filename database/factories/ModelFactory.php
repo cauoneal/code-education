@@ -11,7 +11,7 @@
 |
 */
 
-$factory->define(CodeProject\User::class, function (Faker\Generator $faker) {
+$factory->define(CodeProject\Entities\User::class, function (Faker\Generator $faker) {
     static $password;
 
     return [
@@ -21,7 +21,7 @@ $factory->define(CodeProject\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });    
-$factory->define(CodeProject\Client::class, function (Faker\Generator $faker) {
+$factory->define(CodeProject\Entities\Client::class, function (Faker\Generator $faker) {
     static $password;
 
     return [

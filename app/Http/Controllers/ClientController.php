@@ -3,10 +3,19 @@
 namespace CodeProject\Http\Controllers;
 
 use Illuminate\Http\Request;
-use CodeProject\Http\Requests;
-use Illuminate\Support\Facades\Input;
+use CodeProject\Repositories\ClientRepository;
 
-class ClientController extends Controller {
+class ClientController extends Controller 
+{
+    /***
+     * @var ClientRepository
+     */
+                
+    private $repository;
+    
+    public function __construct(ClientRepository $repository) {
+        $this->repository = $repository;
+    }
 
     /**
      * Display a listing of the resource.
@@ -14,7 +23,7 @@ class ClientController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        return \CodeProject\Client::all();
+        return $this->repository->all();
     }
 
     /**
@@ -24,7 +33,7 @@ class ClientController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        return \CodeProject\Client::create($request->all());
+        return $this->repository->create($request->all());
     }
 
     /**
@@ -34,7 +43,7 @@ class ClientController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        return \CodeProject\Client::find($id);
+        return $this->repository->find($id);
     }
 
     /**
@@ -55,10 +64,10 @@ class ClientController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        $client = \CodeProject\Client::find($id);
+        $client = $this->repository->find($id);
         if ($client != NULL) {            
             $client->update($request->all());
-            return $client::find($id);
+            return $this->repository->find($id);
         }else{
             return json_encode("Cliente nao foi encontrado");
         }        
@@ -72,7 +81,7 @@ class ClientController extends Controller {
      */
     public function destroy($id) {
         $delete = false;
-        $client = \CodeProject\Client::find($id);
+        $client = $this->repository->find($id);
         if ($client != NULL) {
             $delete = $client->delete();
         }
