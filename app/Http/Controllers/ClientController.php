@@ -4,7 +4,7 @@ namespace CodeProject\Http\Controllers;
 
 use Illuminate\Http\Request;
 use CodeProject\Repositories\ClientRepository;
-
+use CodeProject\Services\ClientService;
 class ClientController extends Controller 
 {
     /***
@@ -13,8 +13,16 @@ class ClientController extends Controller
                 
     private $repository;
     
-    public function __construct(ClientRepository $repository) {
+    /**
+     *
+     * @var type ClientService
+     */
+    
+    private $service;
+    
+    public function __construct(ClientRepository $repository, ClientService $service) {
         $this->repository = $repository;
+        $this->service = $service;
     }
 
     /**
@@ -33,7 +41,7 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        return $this->repository->create($request->all());
+        return $this->service->create($request->all());
     }
 
     /**
@@ -64,13 +72,15 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        $client = $this->repository->find($id);
-        if ($client != NULL) {            
-            $client->update($request->all());
-            return $this->repository->find($id);
-        }else{
-            return json_encode("Cliente nao foi encontrado");
-        }        
+        return $this->service->update($request->all(), $id);
+        
+//        $client = $this->repository->find($id);
+//        if ($client != NULL) {            
+//            $client->update($request->all());
+//            return $this->repository->find($id);
+//        }else{
+//            return json_encode("Cliente nao foi encontrado");
+//        }        
     }
 
     /**
@@ -80,16 +90,17 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        $delete = false;
-        $client = $this->repository->find($id);
-        if ($client != NULL) {
-            $delete = $client->delete();
-        }
-        if ($delete) {
-            return json_encode("Deletado com sucesso!");
-        } else {
-            return json_encode("Impossivel foi possivel deletar");
-        }
+        $this->repository->delete($id);
+//        $delete = false;
+//        $client = $this->repository->find($id);
+//        if ($client != NULL) {
+//            $delete = $client->delete();
+//        }
+//        if ($delete) {
+//            return json_encode("Deletado com sucesso!");
+//        } else {
+//            return json_encode("Impossivel foi possivel deletar");
+//        }
     }
 
 }

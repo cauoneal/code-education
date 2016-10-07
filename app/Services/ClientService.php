@@ -10,7 +10,7 @@ namespace CodeProject\Services;
 
 use CodeProject\Repositories\ClientRepository;
 use CodeProject\Validators\ClientValidator;
-use Illuminate\Validation\ValidationException;
+use Prettus\Validator\Exceptions\ValidatorException;
 /**
  * Description of ClientService
  *
@@ -36,24 +36,24 @@ class ClientService {
     
     public function create(array $data){
         try {
-            $this->validator->with($data)->passOrFail();
+            $this->validator->with($data)->passesOrFail();
             return $this->repositry->create($data);
-        } catch (ValidationException $exc) {
+        } catch (ValidatorException $exc) {
             return [
                 'error' => true,
-                'message' => $exc->getMessage()
+                'message' => $exc->getMessageBag()
             ];
         }        
     }
     
     public function update(array $data, $id){
         try {
-            $this->validator->with($data)->passOrFail();
+            $this->validator->with($data)->passesOrFail();
             return $this->repositry->update($data,$id);
-        } catch (ValidationException $exc) {
+        } catch (ValidatorException $exc) {
             return [
                 'error' => true,
-                'message' => $exc->getMessage()
+                'message' => $exc->getMessageBag()
             ];
         }        
         

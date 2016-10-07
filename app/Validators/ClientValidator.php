@@ -17,8 +17,10 @@ use Prettus\Validator\LaravelValidator;
 class ClientValidator extends LaravelValidator 
 {
     protected $rules = [
-        'nome' => 'required|max:255',
-        'sigla' => 'required|max:5',
-        'ativo' => 'required',
+        'name' => 'required|max:255',
+        'responsible' => 'required|max:255',
+        'email' => 'required|email',
+        'phone' => 'required',
+        'address' => 'required'
     ];
 }
