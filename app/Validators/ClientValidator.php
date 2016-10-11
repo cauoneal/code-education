@@ -9,18 +9,24 @@
 namespace CodeProject\Validators;
 
 use Prettus\Validator\LaravelValidator;
+use Prettus\Validator\Contracts\ValidatorInterface;
+
 /**
  * Description of ClientValidator
  *
  * @author carlsilv
  */
-class ClientValidator extends LaravelValidator 
-{
+class ClientValidator extends LaravelValidator {
+
     protected $rules = [
-        'name' => 'required|max:255',
-        'responsible' => 'required|max:255',
-        'email' => 'required|email',
-        'phone' => 'required',
-        'address' => 'required'
+        ValidatorInterface::RULE_CREATE => [
+            'name' => 'required|max:255',
+            'responsible' => 'required|max:255',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'address' => 'required'
+        ],
+        ValidatorInterface::RULE_UPDATE => []
     ];
+
 }
