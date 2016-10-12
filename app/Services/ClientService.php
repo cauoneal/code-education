@@ -25,7 +25,7 @@ class ClientService {
     protected  $repositry;
     /**
      * 
-     * @param ClientRepository $validator
+     * @param ClientValidator $validator
      */
     protected  $validator;
 
