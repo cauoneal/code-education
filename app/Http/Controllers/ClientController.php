@@ -5,6 +5,7 @@ namespace CodeProject\Http\Controllers;
 use Illuminate\Http\Request;
 use CodeProject\Repositories\ClientRepository;
 use CodeProject\Services\ClientService;
+
 class ClientController extends Controller 
 {
     /***

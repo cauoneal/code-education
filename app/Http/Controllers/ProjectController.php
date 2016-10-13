@@ -4,18 +4,35 @@ namespace CodeProject\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use CodeProject\Http\Requests;
+use CodeProject\Repositories\ProjectRepository;
 
 class ProjectController extends Controller
 {
+    /**
+     * @var type ProjectRepository
+     */
+    private $repository;
+    
+    /**
+     *
+     * @var type ClientService
+     */    
+    private $service;
+    
+    
+    public function __construct(ProjectRepository $repository) {
+        $this->repository = $repository;
+        //$this->service = $service;
+    }
+    
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
+    {        
+        return $this->repository->all();
     }
 
     /**
