@@ -4,10 +4,13 @@ namespace CodeProject\Entities;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Prettus\Repository\Contracts\Transformable;
+use Prettus\Repository\Traits\TransformableTrait;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Transformable
 {
     use Notifiable;
+    use TransformableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -26,4 +29,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    
+    public function project()
+    {
+        return $this->hasMany(Project::class);
+    }
 }

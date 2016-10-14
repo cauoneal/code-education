@@ -35,12 +35,21 @@ $factory->define(CodeProject\Entities\Client::class, function (Faker\Generator $
 $factory->define(CodeProject\Entities\Project::class, function (Faker\Generator $faker) {
 
     return [
-        'name' => $faker->name,
-        'description' => $faker->text,
-        'progress' => $faker->text,
-        'status' => $faker->text,
-        'due_date' => $faker->dateTime,   
         'owner_id' => factory(CodeProject\Entities\User::class)->create()->id,
-        'client_id' => factory(CodeProject\Entities\Client::class)->create()->id
+        'client_id' => factory(CodeProject\Entities\Client::class)->create()->id,
+        'name' => $faker->word,
+        'description' => $faker->sentence,
+        'progress' => rand(1,100),
+        'status' => rand(1,3),
+        'due_date' => $faker->dateTime('now')
+    ];    
+});
+
+$factory->define(CodeProject\Entities\ProjecNote::class, function (Faker\Generator $faker) {
+
+    return [
+        'project_id' => factory(CodeProject\Entities\Project::class)->create()->id,        
+        'title' => $faker->word,
+        'note' => $faker->paragraph        
     ];    
 });

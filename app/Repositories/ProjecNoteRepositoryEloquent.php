@@ -4,15 +4,15 @@ namespace CodeProject\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use CodeProject\Repositories\ProjectRepository;
-use CodeProject\Entities\Project;
-use CodeProject\Validators\ProjectValidator;
+use CodeProject\Repositories\ProjecNoteRepository;
+use CodeProject\Entities\ProjecNote;
+use CodeProject\Validators\ProjecNoteValidator;
 
 /**
- * Class ProjectRepositoryEloquent
+ * Class ProjecNoteRepositoryEloquent
  * @package namespace CodeProject\Repositories;
  */
-class ProjectRepositoryEloquent extends BaseRepository implements ProjectRepository
+class ProjecNoteRepositoryEloquent extends BaseRepository implements ProjecNoteRepository
 {
     /**
      * Specify Model class name
@@ -21,7 +21,7 @@ class ProjectRepositoryEloquent extends BaseRepository implements ProjectReposit
      */
     public function model()
     {
-        return Project::class;
+        return ProjecNote::class;
     }
 
     

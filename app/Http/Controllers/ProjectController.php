@@ -31,8 +31,11 @@ class ProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {        
-        return $this->repository->all();
+    {                        
+        return $project = $this->repository
+                ->with('client')
+                ->with('owner')
+                ->all();        
     }
 
     /**
