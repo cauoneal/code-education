@@ -5,6 +5,7 @@ namespace CodeProject\Http\Controllers;
 use Illuminate\Http\Request;
 
 use CodeProject\Repositories\ProjectRepository;
+use CodeProject\Services\ProjectService;
 
 class ProjectController extends Controller
 {
@@ -20,9 +21,9 @@ class ProjectController extends Controller
     private $service;
     
     
-    public function __construct(ProjectRepository $repository) {
+    public function __construct(ProjectRepository $repository, ProjectService $service) {
         $this->repository = $repository;
-        //$this->service = $service;
+        $this->service = $service;
     }
     
     /**
@@ -34,7 +35,7 @@ class ProjectController extends Controller
     {                        
         return $project = $this->repository
                 ->with('client')
-                ->with('owner')
+                ->with('owner')                
                 ->all();        
     }
 
@@ -45,7 +46,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+                
     }
 
     /**
@@ -56,7 +57,7 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return $this->service->create($request->all());
     }
 
     /**
@@ -67,7 +68,10 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        //
+        return $this->repository
+                ->with('client')
+                ->with('owner')
+                ->find($id);
     }
 
     /**
@@ -90,7 +94,7 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return $this->service->update($request->all(), $id);
     }
 
     /**
@@ -101,6 +105,6 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return $this->repository->delete($id) ? "Registro deletado com sucesso" : "Não foi possivel deletar";
     }
 }

@@ -5,6 +5,8 @@ namespace CodeProject\Http\Controllers;
 use Illuminate\Http\Request;
 use CodeProject\Repositories\ClientRepository;
 use CodeProject\Services\ClientService;
+use CodeProject\Validators\ProjectValidator;
+
 
 class ClientController extends Controller 
 {
@@ -91,17 +93,12 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        $this->repository->delete($id);
-//        $delete = false;
-//        $client = $this->repository->find($id);
-//        if ($client != NULL) {
-//            $delete = $client->delete();
-//        }
-//        if ($delete) {
-//            return json_encode("Deletado com sucesso!");
-//        } else {
-//            return json_encode("Impossivel foi possivel deletar");
-//        }
+        $delete = $this->repository->delete($id);
+        if ($delete) {
+            return json_encode("Deletado com sucesso!");
+        } else {
+            return json_encode("Impossivel foi possivel deletar");
+        }
     }
 
 }

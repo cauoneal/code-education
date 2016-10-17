@@ -16,13 +16,13 @@ use Prettus\Validator\Contracts\ValidatorInterface;
  *
  * @author carlsilv
  */
-class ClientValidator extends LaravelValidator {
+class ProjectValidator extends LaravelValidator {
 
     protected $rules = [
         ValidatorInterface::RULE_CREATE => [
             'owner_id' => 'required',
             'client_id' => 'required',
-            'name' => 'required|email',
+            'name' => 'required',
             'progress' => 'required',
             'status' => 'required',
             'due_date' => 'required'
