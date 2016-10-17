@@ -4,24 +4,24 @@ namespace CodeProject\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use CodeProject\Repositories\ProjectRepository;
-use CodeProject\Services\ProjectService;
+use CodeProject\Repositories\ProjecNoteRepository;
+use CodeProject\Services\ProjectNoteService;
 
-class ProjectController extends Controller
+class ProjectNoteController extends Controller
 {
     /**
-     * @var type ProjectRepository
+     * @var type ProjecNoteRepository
      */
     private $repository;
     
     /**
      *
-     * @var type ProjectService
+     * @var type ProjectNoteService
      */    
     private $service;
     
     
-    public function __construct(ProjectRepository $repository, ProjectService $service) {
+    public function __construct(ProjecNoteRepository $repository, ProjectNoteService $service) {
         $this->repository = $repository;
         $this->service = $service;
     }
@@ -31,12 +31,10 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {                        
         return $project = $this->repository
-                ->with('client')
-                ->with('owner')                
-                ->all();        
+                ->findWhere(['project_id' => $id]);        
     }
 
     /**
@@ -66,12 +64,10 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, $noteId)
     {
-        return $this->repository
-                ->with('client')
-                ->with('owner')
-                ->find($id);
+        return $this->repository                
+                ->findWhere(['project_id' => $id, 'id' => $noteId]);
     }
 
     /**
@@ -92,9 +88,9 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $noteId)
     {
-        return $this->service->update($request->all(), $id);
+        return $this->service->update($request->all(), $noteId);
     }
 
     /**
