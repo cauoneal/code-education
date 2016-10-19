@@ -76,14 +76,6 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id) {
         return $this->service->update($request->all(), $id);
-        
-//        $client = $this->repository->find($id);
-//        if ($client != NULL) {            
-//            $client->update($request->all());
-//            return $this->repository->find($id);
-//        }else{
-//            return json_encode("Cliente nao foi encontrado");
-//        }        
     }
 
     /**
@@ -93,12 +85,7 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        $delete = $this->repository->delete($id);
-        if ($delete) {
-            return json_encode("Deletado com sucesso!");
-        } else {
-            return json_encode("Impossivel foi possivel deletar");
-        }
+        return $this->repository->delete($id) ? "Registro deletado com sucesso" : "Não foi possivel deletar";
     }
 
 }

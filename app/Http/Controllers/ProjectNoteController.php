@@ -99,8 +99,8 @@ class ProjectNoteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id,$noteId)
     {
-        return $this->repository->delete($id) ? "Registro deletado com sucesso" : "Não foi possivel deletar";
+        return $this->repository->delete($noteId) ? "Registro deletado com sucesso" : "Não foi possivel deletar";
     }
 }
