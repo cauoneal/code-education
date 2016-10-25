@@ -3,40 +3,39 @@
 namespace CodeProject\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use CodeProject\Repositories\ProjectRepository;
 use CodeProject\Services\ProjectService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Exception;
 
-class ProjectController extends Controller
-{
+class ProjectController extends Controller {
+
     /**
      * @var type ProjectRepository
      */
     private $repository;
-    
+
     /**
      *
      * @var type ProjectService
-     */    
+     */
     private $service;
-    
-    
+
     public function __construct(ProjectRepository $repository, ProjectService $service) {
         $this->repository = $repository;
         $this->service = $service;
     }
-    
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {                        
+    public function index() {
         return $project = $this->repository
                 ->with('client')
-                ->with('owner')                
-                ->all();        
+                ->with('owner')
+                ->all();
     }
 
     /**
@@ -44,9 +43,8 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-                
+    public function create() {
+        
     }
 
     /**
@@ -55,8 +53,7 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         return $this->service->create($request->all());
     }
 
@@ -66,12 +63,15 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        return $this->repository
-                ->with('client')
-                ->with('owner')
-                ->find($id);
+    public function show($id) {
+        try {
+            return $this->repository
+                            ->with('client')
+                            ->with('owner')
+                            ->find($id);
+        } catch (ModelNotFoundException $ex) {
+            return ['error' => true, 'message' => 'Projeto não encontrado'];
+        }
     }
 
     /**
@@ -80,8 +80,7 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         //
     }
 
@@ -92,8 +91,7 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         return $this->service->update($request->all(), $id);
     }
 
@@ -103,8 +101,16 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        return $this->repository->delete($id) ? "Registro deletado com sucesso" : "Não foi possivel deletar";
-    }
+    public function destroy($id) {
+        try {
+            return $this->repository->delete($id) ? "Registro deletado com sucesso" : "Não foi possivel deletar";
+        } catch (QueryException $e) {
+            return ['error'=>true, 'message' => 'Projeto não pode ser apagado pois existe um ou mais clientes vinculados a ele.'];
+        } catch (ModelNotFoundException $e) {
+            return ['error'=>true, 'message' => 'Projeto não encontrado.'];
+        } catch (Exception $e) {
+            return ['error'=>true, 'message' => 'Ocorreu algum erro ao excluir o projeto.'];
+        }
+    }           
+
 }

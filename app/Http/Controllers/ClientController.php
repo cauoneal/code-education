@@ -5,24 +5,23 @@ namespace CodeProject\Http\Controllers;
 use Illuminate\Http\Request;
 use CodeProject\Repositories\ClientRepository;
 use CodeProject\Services\ClientService;
-use CodeProject\Validators\ProjectValidator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Exception;
+use Illuminate\Database\QueryException;
 
-
-class ClientController extends Controller 
-{
-    /***
+class ClientController extends Controller {
+    /*     * *
      * @var ClientRepository
      */
-                
+
     private $repository;
-    
+
     /**
      *
      * @var type ClientService
      */
-    
     private $service;
-    
+
     public function __construct(ClientRepository $repository, ClientService $service) {
         $this->repository = $repository;
         $this->service = $service;
@@ -54,7 +53,11 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        return $this->repository->find($id);
+        try {
+            return $this->repository->find($id);
+        } catch (ModelNotFoundException $ex) {
+            return ['error' => true, 'message' => 'Cliente não encontrado.'];
+        }
     }
 
     /**
@@ -85,7 +88,16 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        return $this->repository->delete($id) ? "Registro deletado com sucesso" : "Não foi possivel deletar";
+        try {
+            return $this->repository->find($id)->delete() ?
+                    ['error' => false, 'message' => "Registro deletado com sucesso"] : ['error' => false, 'message' => "Não foi possivel deletar"];
+        } catch (QueryException $e) {
+            return ['error' => true, 'message' => 'Cliente não pode ser apagado pois existe um ou mais projetos vinculados a ele.'];
+        } catch (ModelNotFoundException $e) {
+            return ['error' => true, 'message' => 'Cliente não encontrado.'];
+        } catch (Exception $e) {
+            return ['error' => true, 'message' => 'Ocorreu algum erro ao excluir o cliente.'];
+        }
     }
 
 }
