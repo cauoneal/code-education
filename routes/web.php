@@ -26,6 +26,7 @@ Route::get('client/{id}','ClientController@show');
 Route::delete('client/{id}','ClientController@destroy');
 Route::put('client/{id}','ClientController@update');
 
+Route::get('project/{id}/members','ProjectMemberController@index');
 
 Route::get('project/{id}/task','ProjectTaskController@index');
 Route::get('project/{id}/task/{taskId}','ProjectTaskController@show');
