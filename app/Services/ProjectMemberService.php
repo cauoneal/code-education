@@ -8,7 +8,7 @@
 
 namespace CodeProject\Services;
 
-use CodeProject\Repositories\ProjectMembersRepository;
+use CodeProject\Repositories\ProjectMemberRepository;
 use CodeProject\Validators\ProjectMemberValidator;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Prettus\Validator\Contracts\ValidatorInterface;
