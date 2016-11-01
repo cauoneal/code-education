@@ -35,7 +35,7 @@ class ProjectController extends Controller {
         return $project = $this->repository
                 ->with('client')
                 ->with('owner')
-                ->all();
+                ->findWhere(['owner_id' => \Authorizer::getResourceOwnerId()]);
     }
 
     /**
@@ -64,6 +64,9 @@ class ProjectController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
+        if ($this->CheckProjectOwner($id) == false){
+            return ['success' => 'Access Forbiden'];
+        }
         try {
             return $this->repository
                             ->with('client')
@@ -105,12 +108,17 @@ class ProjectController extends Controller {
         try {
             return $this->repository->delete($id) ? "Registro deletado com sucesso" : "Não foi possivel deletar";
         } catch (QueryException $e) {
-            return ['error'=>true, 'message' => 'Projeto não pode ser apagado pois existe um ou mais clientes vinculados a ele.'];
+            return ['error' => true, 'message' => 'Projeto não pode ser apagado pois existe um ou mais clientes vinculados a ele.'];
         } catch (ModelNotFoundException $e) {
-            return ['error'=>true, 'message' => 'Projeto não encontrado.'];
+            return ['error' => true, 'message' => 'Projeto não encontrado.'];
         } catch (Exception $e) {
-            return ['error'=>true, 'message' => 'Ocorreu algum erro ao excluir o projeto.'];
+            return ['error' => true, 'message' => 'Ocorreu algum erro ao excluir o projeto.'];
         }
-    }           
+    }
 
+    private function CheckProjectOwner($projectId)
+    {
+        $userId = \Authorizer::getResourceOwnerId();                
+        return $this->repository->isOwner($projectId, $userId);
+    }
 }

@@ -20,9 +20,13 @@ Route::post('oauth/access_token', function () {
 });
 
 Route::group(['middleware' => 'oauth'], function() {
+    
     Route::resource('client', 'ClientController', ['except' => ['create', 'edit']]);
-    Route::group(['prefix' => 'project'], function() {
-        Route::resource('', 'ProjectController', ['except' => ['create', 'edit']]);
+    
+//    Route::group(['middleware' => 'CheckProjectOwner'], function(){
+      Route::resource('project', 'ProjectController', ['except' => ['create', 'edit']]);  
+//    });    
+    Route::group(['prefix' => 'project'], function() {        
 
         Route::get('{id}/member', 'ProjectController@members');
         Route::post('{id}/member/{member_id}', 'ProjectController@addMember');
