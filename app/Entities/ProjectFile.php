@@ -6,24 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
-class ProjectMembers extends Model implements Transformable
-{
+class ProjectFile extends Model implements Transformable {
+
     use TransformableTrait;
 
     protected $fillable = [
-        'project_id',
-        'member_id'
+        'name',        
+        'description',
+        'extension'        
     ];
-    
     
     public function project()
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(Projec::class);
     }
-    
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
+        
 }

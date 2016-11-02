@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use CodeProject\Repositories\ProjectRepository;
 use CodeProject\Services\ProjectService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Exception;
 
-class ProjectController extends Controller {
+
+class ProjectFileController extends Controller {
 
     /**
      * @var type ProjectRepository
@@ -53,8 +53,17 @@ class ProjectController extends Controller {
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
-        return $this->service->create($request->all());
+    public function store(Request $request)
+    {
+        $file = $request->file('file');        
+        $extesion = $file->getClientOriginalExtension();
+        
+        $data['file'] = $file;
+        $data['extension'] = $extesion;
+        $data['name'] = $request->name;
+        $data['project_id'] = $request->project_id;
+        $data['description'] = $request->description;
+        $this->service->createFile($data);
     }
 
     /**

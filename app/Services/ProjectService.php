@@ -13,7 +13,8 @@ use CodeProject\Validators\ProjectValidator;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-
+use Illuminate\Contracts\Filesystem\Factory;
+use Illuminate\Filesystem\Filesystem;
 /**
  * Description of ClientService
  *
@@ -32,10 +33,24 @@ class ProjectService {
      * @param ProjectValidator $validator
      */
     protected $validator;
+    
+    /**
+     * 
+     * @param Filesystem $filesystem
+     */
+    protected $filesystem;    
+    
+    /**
+     * 
+     * @param Factory $storage
+     */
+    protected $storage;    
 
-    public function __construct(ProjectRepository $repository, ProjectValidator $validator) {
+    public function __construct(ProjectRepository $repository, ProjectValidator $validator, Filesystem $filesystem, Factory $storage) {
         $this->repositry = $repository;
         $this->validator = $validator;
+        $this->filesystem = $filesystem;
+        $this->storage = $storage;
     }
 
     public function create(array $data) {
@@ -65,6 +80,13 @@ class ProjectService {
                 'message' => $exc->getMessageBag()
             ];
         }
+    } 
+    public function createFile(array $data)
+    {
+        $project = $this->repositry->skipPresenter()->find($data['project_id']);
+        $projectFile = $project->files()->create($data);
+        $this->storage->put($projectFile->id.".".$data['extension'], $this->filesystem->get($data['file']));
     }
+        
     
 }

@@ -36,8 +36,8 @@ class User extends Authenticatable implements Transformable
         return $this->hasMany(Project::class);
     }
     
-    public function member()
+    public function projects()
     {
-        return $this->hasMany(ProjectMembers::class);
+        return $this->belongsToMany(Project::class, 'project_members','member_id','project_id');
     }
 }

@@ -23,6 +23,8 @@ Route::group(['middleware' => 'oauth'], function() {
     
     Route::resource('client', 'ClientController', ['except' => ['create', 'edit']]);
     
+//  o middleware verifica em todas as rotas a permissão o que pode não ser interessante no
+//  caso da rota index pois não temos nenhum parametro  
 //    Route::group(['middleware' => 'CheckProjectOwner'], function(){
       Route::resource('project', 'ProjectController', ['except' => ['create', 'edit']]);  
 //    });    
@@ -43,6 +45,8 @@ Route::group(['middleware' => 'oauth'], function() {
         Route::post('{id}/note', 'ProjectNoteController@store');
         Route::put('{id}/note/{noteId}', 'ProjectNoteController@update');
         Route::delete('{id}/note/{noteId}', 'ProjectNoteController@destroy');
+        
+        Route::post('{id}/file','ProjectFileController@store');
     });
 });
 
